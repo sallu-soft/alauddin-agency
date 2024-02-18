@@ -65,6 +65,8 @@ const columns = [
     {
         name: <p className="font-bold text-lg">Payment</p>,
         selector: row => row.payment ,
+        minWidth:"150px",
+        wrap:true,
     },
    
     {
@@ -125,7 +127,7 @@ const User_Table = ({passenger}) => {
             </button>
         </div>
       </nav>
-      <p className="p-5 text-xl font-bold">Total : {passenger.length}</p>
+      <p className="p-5 text-xl font-bold">Total : {singleUsersData.length}</p>
     <DataTable
             columns={columns}
             data={filter}
