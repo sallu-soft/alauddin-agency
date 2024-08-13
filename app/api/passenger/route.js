@@ -11,8 +11,10 @@ export async function POST(request){
         gender,
         country,
         medical,
+        medical_date,
         mofa,
         bio_finger,
+        bio_status,
         pc_no,
         visa_no,
         id_no,
@@ -27,15 +29,17 @@ export async function POST(request){
         status
     } = await request.json();
 
-    console.log(status)
+    console.log(medical_date, bio_status)
     await connectMongoDB();
     const passenger = await Passenger.create({name,
         passport_no,
         gender,
         country,
         medical,
+        medical_date,
         mofa,
         bio_finger,
+        bio_status,
         pc_no,
         visa_no,
         id_no,

@@ -17,8 +17,10 @@ export async function PUT(request, {params}){
         gender,
         country,
         medical,
+        medical_date,
         mofa,
         bio_finger,
+        bio_status,
         pc_no,
         visa_no,
         id_no,
@@ -38,8 +40,10 @@ export async function PUT(request, {params}){
         gender,
         country,
         medical,
+        medical_date,
         mofa,
         bio_finger,
+        bio_status,
         pc_no,
         visa_no,
         id_no,
@@ -53,26 +57,7 @@ export async function PUT(request, {params}){
         agent,
         status
     }}, { new: true })
-    // (id ,{name,
-    //     passport_no,
-    //     gender,
-    //     country,
-    //     medical,
-    //     mofa,
-    //     bio_finger,
-    //     pc_no,
-    //     visa_no,
-    //     id_no,
-    //     training,
-    //     bmet_finger,
-    //     visa_stamping_date,
-    //     manpower,
-    //     delivery,
-    //     payment,
-    //     remark,
-    //     agent,
-    //     status
-    // });
+    
     return NextResponse.json({message:"Passenger Updated Succesfully"},{status:200});
 
 }
