@@ -28,7 +28,7 @@ const AdminDashboard = async () => {
  
   return (
     <div className="m-4 shadow-lg mx-auto w-full">
-      <Admin_Table passenger={passenger}/>
+      <Admin_Table passenger={passenger?.slice().reverse()}/>
     </div>
   );
 };

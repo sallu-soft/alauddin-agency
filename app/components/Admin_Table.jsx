@@ -101,7 +101,7 @@ const Admin_Table = ({passenger}) => {
                   <div className="font-semibold">
                       {row.medical} <br />
                       {medicalDate ? formatDate(medicalDate) : 'N/A'}<br />
-                      <span className="text-red-600">
+                      <span className={daysRemaining<=10?"text-red-700":"text-green-600"}>
                           {daysRemaining === 'N/A' ? '' : `${daysRemaining} days remaining`}
                       </span>
                   </div>
@@ -156,7 +156,7 @@ const Admin_Table = ({passenger}) => {
                 <div className="font-semibold">
                     
                     {formattedVisaDate}<br />
-                    <span className="text-red-600">
+                    <span className={daysRemaining<=10?"text-red-700":"text-green-600"}>
                         {daysRemaining === 'N/A' ? '' : `${daysRemaining} days remaining`}
                     </span>
                 </div>

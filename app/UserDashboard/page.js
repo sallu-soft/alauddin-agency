@@ -29,7 +29,7 @@ const UserDashboard = async () => {
 // }
   return (
     <div>
-      <User_Table passenger={passenger}/>
+      <User_Table passenger={passenger?.slice().reverse()}/>
     </div>
   )
 }
