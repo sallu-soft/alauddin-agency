@@ -12,9 +12,8 @@ import TextInput from './TextInput';
 const Admin_Table = ({passenger}) => {
     const router = useRouter()
     const [search, setSearch]= useState('');
-    
+    const [users, setUsers] = useState([]);
     const [filter, setFilter]= useState([]);
-    const [users, setUsers]= useState([]);
     const [pass, setPass]= useState({
         name:"",
         mofa:"",
@@ -92,22 +91,38 @@ const Admin_Table = ({passenger}) => {
               const timeDiff = now.getTime() - medicalDate?.getTime();
               let daysElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
-              let daysRemaining = 'N/A';
+              let daysRemaining = 0;
               if (daysElapsed >= 0 && daysElapsed <= 90) {
                   daysRemaining = Math.max(90 - daysElapsed, 0);
               }
              
-  
+              
               return (
                   <div className="font-semibold">
                       {row.medical} <br />
                       {medicalDate ? formatDate(medicalDate) : 'N/A'}<br />
-                      <span className={daysRemaining<=10?"text-red-700":"text-green-600"}>
-                          {daysRemaining === 'N/A' ? '' : `${daysRemaining} days remaining`}
+                      <span className={daysRemaining<=10?"text-red-700 py-2":"text-green-600 py-2"}>
+                      {
+                         medicalDate == null
+                          ? '' 
+                          :  daysRemaining <= 0 
+                            ? 'Expired' 
+                            : `${daysRemaining} days remaining`
+                      }
                       </span>
+                    
+                     
                   </div>
               );
           },
+            wrap:true,
+            minWidth:"150px",
+        },
+        {
+            name: <p className="font-bold text-lg">Medical Status</p>,
+            selector: row => {
+              return  <p className={`${(row?.medical_status=="Unfit")?"p-1 text-md rounded-lg bg-red-600 text-white":"bg-green-700 p-1 text-md text-white rounded-lg"} `}>{row.medical_status}</p>
+            },
             wrap:true,
         },
         {
@@ -117,8 +132,9 @@ const Admin_Table = ({passenger}) => {
         },
         {
             name: <p className="font-bold text-lg">Biometric Finger</p>,
-            selector: row => <div className="min-w-[230px] flex gap-1 flex-col p-1"><h3 className="">{row.bio_finger}</h3><p>{row.bio_status}</p></div>,
+            selector: row => <div className="min-w-[230px] flex gap-1 flex-col p-1"><h3 className="">{row?.bio_finger}</h3><p className={`${(row?.bio_status=="Processing")?"bg-red-600 text-md p-1 w-fit text-white rounded-lg":""}bg-green-700 text-md p-1 w-fit text-white rounded-lg`}>{row?.bio_status}</p></div>,
             wrap:true,
+            minWidth:"120px"
         },
         {
             name: <p className="font-bold text-lg">PC No</p>,
@@ -133,14 +149,14 @@ const Admin_Table = ({passenger}) => {
             name: <p className="font-bold text-lg">Visa Stamping Date</p>,
             selector: row => {
               
-            const visaDate = row.visa_stamping_date ? new Date(row.visa_stamping_date) : null;
+            const visaDate = row?.visa_stamping_date ? new Date(row.visa_stamping_date) : null;
+            
             let formattedVisaDate = 'N/A';
             if (visaDate && !isNaN(visaDate.getTime())) {
                 formattedVisaDate = formatDate(visaDate);
             }else{
                 formattedVisaDate = row?.visa_stamping_date;
             }
-            // Calculate the difference if medicalDate is available
             
             const now = new Date();
 
@@ -165,13 +181,17 @@ const Admin_Table = ({passenger}) => {
           },
         },
         {
-            name: <p className="font-bold text-lg">Training</p>,
-            selector: row => row.training ,
+            name: <p className="font-bold text-lg">Training/BMET Finger</p>,
+            selector: row => {
+              return <div className="flex flex-col gap-2">
+                <p>Training: {row?.training}</p>
+                <p>BMET Finger: {row?.bmet_finger}</p>
+              </div>
+            },
+            wrap:true,
+            minWidth:"200px"
         },
-        {
-            name: <p className="font-bold text-lg">BMET Finger</p>,
-            selector: row => row.bmet_finger ,
-        },
+        
        
         {
             name: <p className="font-bold text-lg">Manpower</p>,
@@ -314,11 +334,11 @@ const Admin_Table = ({passenger}) => {
     <>
     <div>
     <div className="!bg-blue-400 flex gap-2 mx-2 px-3 py-2">
-        <TextInput name="name" id="name" list="agents" type="text" placeholder="Type Name" lebel="Agent Name" value={pass.name} handleChange={(e)=>{setPass({...pass,name:e.target.value})}}/>
+        <TextInput name="name" id="name" type="text" placeholder="Type Name" lebel="Agent Name" list="agents" value={pass.name} handleChange={(e)=>{setPass({...pass,name:e.target.value})}}/>
         <datalist id="agents">
-    <option value="" disabled>Select Agent</option>
-    {users.map(user => <option key={user._id} value={user.name}>{user.name}</option>)}
-</datalist>
+            <option value="" disabled>Select Agent</option>
+            {users.map(user => <option key={user._id} value={user.name}>{user.name}</option>)}
+        </datalist>
         <TextInput name="medical" id="medical" type="text" placeholder="Type Medical" lebel="Medical" value={pass.medical} handleChange={(e)=>{setPass({...pass,medical:e.target.value})}}/>
         <TextInput name="mofa" id="mofa" type="text" placeholder="Type mofa" lebel="Mofa" value={pass.mofa} handleChange={(e)=>{setPass({...pass,mofa:e.target.value})}}/>
         <TextInput name="manpower" id="manpower" type="text" placeholder="Type manpower" lebel="Manpower" value={pass.manpower} handleChange={(e)=>{setPass({...pass,manpower:e.target.value})}}/>
@@ -360,7 +380,7 @@ const Admin_Table = ({passenger}) => {
             pagination
             highlightOnHover
             subHeader
-            subHeaderComponent={<div className="flex justify-between items-center w-full"><input type="text" className="w-25 form-control border-2 border-blue-500 p-2 rounded-md" placeholder="Search..." value={search} onChange={(e)=>setSearch(e.target.value)}/>
+            subHeaderComponent={<div className="flex justify-between items-center w-full">                <input type="text" className="w-25 form-control border-2 border-blue-500 p-2 rounded-md" placeholder="Search..." value={search} onChange={(e)=>setSearch(e.target.value)}/>
             <CSVLink data={extractedData} filename="hello" className="bg-blue-700 p-3 my-5 text-white flex items-center justify-center w-fit rounded"><FaFileDownload className="mr-2"/> Download</CSVLink>
                 </div>
 

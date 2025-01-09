@@ -254,6 +254,7 @@ const EditForm = ({id, Passenger}) => {
       gender,
       country,
       medical,
+      medical_status,
       medical_date,
       mofa,
       bio_finger,
@@ -284,6 +285,7 @@ const EditForm = ({id, Passenger}) => {
           gender,
           country,
           medical,
+          medical_status,
           medical_date,
           mofa,
           bio_finger,
@@ -374,7 +376,22 @@ const EditForm = ({id, Passenger}) => {
 
       <TextInput name="medical" id="medical" placeholder="Medical Name, Issue and Expire Date" lebel="Medical Information" value={passenger?.medical} handleChange={(e)=>{setPassenger({...passenger,medical:e.target.value});console.log(passenger)}} />
       <TextInput name="medical_date" type="date" id="medical_date" placeholder="" lebel="Medical Date" value={passenger?.medical_date} handleChange={(e)=>{setPassenger({...passenger,medical_date:e.target.value});console.log(passenger)}} />
-
+      <div className="mb-4 w-full">
+        <label className="block  text-white">Medical Status</label>
+        <select
+         name="medical_status" id="medical_status" placeholder="Medical Status" lebel="Medical Status" value={passenger?.medical_status} 
+          className="form-input mt-1 block h-10 w-full p-2 text-black"
+          onChange={(e) => {setPassenger({...passenger, medical_status: e.target.value})}}
+        >
+        <option value="" disabled>Select Options</option>
+        <option value="Pending" >Pending</option>
+        <option value="Fit" >Fit</option>
+        <option value="Unfit" >Unfit</option>
+        <option value="Interview" >Interview</option>
+        
+        
+        </select>
+      </div>
       <TextInput name="mofa" id="mofa" type="date" placeholder="Type Mofa" lebel="Mofa" value={passenger.mofa} handleChange={(e)=>{setPassenger({...passenger,mofa:e.target.value})}} />
 
       

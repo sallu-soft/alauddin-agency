@@ -26,6 +26,11 @@ const passengerSchema = new Schema({
   remark:String,
   agent:String,
   status:String,
+  medical_status:{
+    type:String,
+    enum:["Pending", "Fit", "Unfit" , "Interview"],
+    default:"Pending"
+  }
 },
 {timestamps:true}
 )

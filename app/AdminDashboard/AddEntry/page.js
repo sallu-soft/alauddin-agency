@@ -209,6 +209,7 @@ const AddEntry = () => {
     gender:"",
     country:"Saudia Arabia",
     medical:"",
+    medical_status:"Pending",
     medical_date:"",
     mofa:"",
     bio_finger:"",
@@ -258,6 +259,7 @@ const AddEntry = () => {
       gender,
       country,
       medical,
+      medical_status,
       medical_date,
       mofa,
       bio_finger,
@@ -288,6 +290,7 @@ const AddEntry = () => {
           gender,
           country,
           medical,
+          medical_status,
           medical_date,
           mofa,
           bio_finger,
@@ -319,7 +322,7 @@ const AddEntry = () => {
       console.log(error);
     }
   };
-  
+  // console.log(passenger)
   return (
 <div className="min-w-screen min-h-screen bg-gray-100 flex flex-col items-center justify-center">
         <div className="w-5/6 rounded-xl bg-gray-800 shadow-lg mr-3">
@@ -371,7 +374,7 @@ const AddEntry = () => {
       {/* <TextInput name="country" id="country" type="text" placeholder="Type Country" lebel="Country" value={passenger.country} handleChange={(e)=>{setPassenger({...passenger,country:e.target.value});console.log(passenger)}} /> */}
 
       <div className="mb-4">
-  <label htmlFor="country" className="block text-white">Country</label>
+  <label className="block text-white">Country</label>
   
   <input value={passenger.country}
     name="country"
@@ -390,7 +393,22 @@ const AddEntry = () => {
       
       <TextInput name="medical_date" id="medical_date" lebel="Medical Date" value={passenger.medical_date} type="date"  handleChange={(e)=>{setPassenger({...passenger,medical_date:e.target.value})}} />
       <TextInput name="medical" id="medical" placeholder="Medical Name" lebel="Medical Name" value={passenger.medical} type="text"  handleChange={(e)=>{setPassenger({...passenger,medical:e.target.value})}} />
-      
+      <div className="mb-4 w-full">
+        <label className="block  text-white">Medical Status</label>
+        <select
+         name="medical_status" id="medical_status" placeholder="Medical Status" lebel="Medical Status" value={passenger.medical_status} 
+          className="form-input mt-1 block h-10 w-full p-2 text-black"
+          onChange={(e) => {setPassenger({...passenger, medical_status:e.target.value})}}
+        >
+        
+        <option value="Pending">Pending</option>
+        <option value="Fit" >Fit</option>
+        <option value="Unfit" >Unfit</option>
+        <option value="Interview" >Interview</option>
+        
+        
+        </select>
+      </div>
       <TextInput name="mofa" id="mofa" type="date" placeholder="Type Mofa" lebel="Mofa" value={passenger.mofa} handleChange={(e)=>{setPassenger({...passenger,mofa:e.target.value})}} />
 
       
