@@ -14,6 +14,8 @@ const Admin_Table = ({passenger}) => {
     const [search, setSearch]= useState('');
     const [users, setUsers] = useState([]);
     const [filter, setFilter]= useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
     const [pass, setPass]= useState({
         name:"",
         mofa:"",
@@ -33,26 +35,42 @@ const Admin_Table = ({passenger}) => {
             redirect("/")
         }
     },[]);
-    const HandleRemove = async (id)=>{
-        try {
-            const res = await fetch(`/api/passenger/${id}`, {
-              method: "DELETE",
-              headers: {
-                "Content-type": "application/json",
-              },
-              body: JSON.stringify({id}),
-            });
-      
-            if (res.ok) {
-              alert("Successfully Deleted Your User")
-              router.refresh();
-            } else {
-              throw new Error("Failed to Delete The User");
-            }
-          } catch (error) {
-            console.log(error);
-          }
-    }
+    const HandleRemove = async (id) => {
+      try {
+        const res = await fetch(`/api/passenger/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        });
+  
+        if (res.ok) {
+          alert("Successfully Deleted Your User");
+          router.refresh();
+        } else {
+          throw new Error("Failed to Delete The User");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const openModal = (id) => {
+      setSelectedId(id);
+      setIsModalOpen(true);
+    };
+  
+    const confirmDelete = () => {
+      if (selectedId) {
+        HandleRemove(selectedId);
+      }
+      closeModal();
+    };
+  
+    const closeModal = () => {
+      setIsModalOpen(false);
+      setSelectedId(null);
+    };
     function formatDate(dateString) {
         if (!dateString) return "";
         let date = new Date(dateString);
@@ -64,7 +82,7 @@ const Admin_Table = ({passenger}) => {
     const columns = [
         {
             name: <p className="font-bold text-lg ">Actions</p>,
-            selector: row => <div className="flex  items-center gap-2"><Link href={`AdminDashboard/EditEntry/${row._id}`}> <MdEditDocument className="text-2xl  text-green-600 font-bold"/></Link><MdDelete className="text-2xl text-red-800 font-bold cursor-pointer" onClick={()=>HandleRemove(row._id)}/></div>,
+            selector: row => <div className="flex  items-center gap-2"><Link href={`AdminDashboard/EditEntry/${row._id}`}> <MdEditDocument className="text-2xl  text-green-600 font-bold"/></Link><MdDelete className="text-2xl text-red-800 font-bold cursor-pointer"  onClick={() => openModal(row._id)}/></div>,
             maxWidth:"25px"
         },
         {
@@ -332,7 +350,29 @@ const Admin_Table = ({passenger}) => {
     console.log(pass)
   return (
     <>
+    
     <div>
+    {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
+          <div className="bg-white p-4 rounded shadow">
+            <p>Are you sure you want to delete this passenger?</p>
+            <div className="mt-4 flex justify-end space-x-2">
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={closeModal}
+                className="bg-gray-300 px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     <div className="!bg-blue-400 flex gap-2 mx-2 px-3 py-2">
         <TextInput name="name" id="name" type="text" placeholder="Type Name" lebel="Agent Name" list="agents" value={pass.name} handleChange={(e)=>{setPass({...pass,name:e.target.value})}}/>
         <datalist id="agents">
