@@ -1,7 +1,8 @@
 "use client"
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
-import { MdDeleteForever } from 'react-icons/md'
+import { MdDeleteForever, MdEdit } from 'react-icons/md'
 
 const SingleUser = ({item}) => {
     const router = useRouter()
@@ -43,10 +44,13 @@ const SingleUser = ({item}) => {
         <div className="text-left font-medium text-green-500">{item.password}</div>
     </td>
     <td className="p-2">
-        <div className="flex justify-center">
+        <div className="flex justify-center space-x-5 items-center">
             <button onClick={()=>handleRemove(item._id)}> 
             <MdDeleteForever className="font-bold text-2xl text-red-800"/>
             </button>
+            <Link href={`EditUser/${item._id}`}> 
+            <MdEdit className="font-bold text-2xl text-green-500"/>
+            </Link>
             {/* <button onClick={()=>handleRemove(item._id)}> 
             <MdDeleteForever className="font-bold text-2xl text-red-800"/>
             </button> */}
